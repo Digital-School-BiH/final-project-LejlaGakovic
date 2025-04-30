@@ -1,0 +1,96 @@
+import tkinter as tk
+from tkinter import scrolledtext
+from PIL import Image, ImageTk 
+
+#Data
+race_schedule = [
+    {'round': 1, 'race': 'Australian GP', 'location': 'Melbourne', 'date': '16 Mar'},
+    {'round': 2, 'race': 'Chinese GP', 'location': 'Shanghai', 'date': '23 Mar'},
+    {'round': 24, 'race': 'Abu Dhabi GP', 'location': 'Yas Marina', 'date': '07 Dec'},
+]
+
+driver_standings = [
+    {'pos': 1, 'name': 'Oscar Piastri', 'team': 'McLaren', 'points': 99},
+    {'pos': 2, 'name': 'Lando Norris', 'team': 'McLaren', 'points': 89},
+    {'pos': 3, 'name': 'Max Verstappen', 'team': 'Red Bull Racing', 'points': 87},
+    {'pos': 4, 'name': 'George Russell', 'team': 'Mercedes', 'points': 73},
+    {'pos': 5, 'name': 'Charles Leclerc', 'team': 'Ferrari', 'points': 47},
+    {'pos': 6, 'name': 'Kimi Antonelli', 'team': 'Mercedes', 'points': 38},
+    {'pos': 7, 'name': 'Lewis Hamilton', 'team': 'Ferrari', 'points': 31},
+    {'pos': 8, 'name': 'Alexander Albon', 'team': 'Williams', 'points': 20},
+    {'pos': 9, 'name': 'Esteban Ocon', 'team': 'Haas', 'points': 14},
+    {'pos': 10, 'name': 'Lance Stroll', 'team': 'Aston Martin', 'points': 10},
+    {'pos': 11, 'name': 'Pierre Gasly', 'team': 'Alpine', 'points': 6},
+    {'pos': 12, 'name': 'Nico Hulkenberg', 'team': 'Kick Sauber', 'points': 6},
+    {'pos': 13, 'name': 'Oliver Bearman', 'team': 'Haas', 'points': 6},
+    {'pos': 14, 'name': 'Isack Hadjar', 'team': 'Racing Bulls', 'points': 5},
+    {'pos': 15, 'name': 'Carlos Sainz', 'team': 'Williams', 'points': 5},
+    {'pos': 16, 'name': 'Yuki Tsunoda', 'team': 'Red Bull Racing', 'points': 5},
+    {'pos': 17, 'name': 'Fernando Alonso', 'team': 'Aston Martin', 'points': 0},
+    {'pos': 18, 'name': 'Liam Lawson', 'team': 'Racing Bulls', 'points': 0},
+    {'pos': 19, 'name': 'Jack Doohan', 'team': 'Alpine', 'points': 0},
+    {'pos': 20, 'name': 'Gabriel Bortoleto', 'team': 'Kick Sauber', 'points': 0}
+]
+
+#Functions
+def display_data(data_string):
+    text_area.config(state=tk.NORMAL)
+    text_area.delete('1.0', tk.END)
+    text_area.insert(tk.END, data_string)
+    text_area.config(state=tk.DISABLED)
+
+def show_schedule_gui():
+    output = "🏁 2025 F1 Race Schedule 🏁\n\n"
+    for race in race_schedule:
+        output += f"R{race['round']}: {race['race']} ({race['location']}) - {race['date']}\n"
+    display_data(output)
+
+def show_driver_standings_gui():
+    output = "👑 Driver Standings 👑\n\n"
+    for driver in sorted(driver_standings, key=lambda x: x['pos']):
+        output += f"{driver['pos']}. {driver['name']} ({driver['team']}) - {driver['points']} pts\n"
+    display_data(output)
+
+def show_constructor_standings_gui():
+    output = "🏆 Team Standings 🏆\n\n"
+    for team in sorted(show_constructor_standings_gui, key=lambda x: x['pos']):
+        output += f"{team['pos']}. {team['name']} - {team['points']} pts\n"
+    display_data(output)
+
+#GUI Setup
+window = tk.Tk()
+window.title("F1 Info Center 🏁")     
+window.geometry("600x550")
+window.configure(bg="black")
+
+
+#Buttons
+button_frame = tk.Frame(window, bg="black")
+button_frame.pack(pady=10)
+
+btn_style = {
+    "fg": "white",
+    "bg": "red",
+    "activebackground": "#cc0000",
+    "activeforeground": "white",
+    "font": ("Helvetica", 10, "bold"),
+    "padx": 10,
+    "pady": 5,
+    "bd": 0
+}
+
+btn_schedule = tk.Button(button_frame, text="📅 Show Schedule", command=show_schedule_gui, **btn_style)
+btn_drivers = tk.Button(button_frame, text="👑 Show Drivers", command=show_driver_standings_gui, **btn_style)
+btn_teams = tk.Button(button_frame, text="🎉 Show Teams", command=show_constructor_standings_gui, **btn_style)
+
+btn_schedule.pack(side=tk.LEFT, padx=5)
+btn_drivers.pack(side=tk.LEFT, padx=5)
+btn_teams.pack(side=tk.LEFT, padx=5)
+
+#Text Area
+text_area = scrolledtext.ScrolledText(window, wrap=tk.WORD, width=60, height=20, font=("Courier New", 10))
+text_area.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)
+text_area.insert(tk.END, "✨ Click a button to see F1 info ✨")
+text_area.config(state=tk.DISABLED, bg="black", fg="white", insertbackground="white")
+
+window.mainloop()
